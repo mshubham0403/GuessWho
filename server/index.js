@@ -17,10 +17,17 @@ app.get("/",function(req,res){
 });
 
 io.on("connection",function(csock){
-    // console.log("The connection is established.");
-    csock.on('send-message-client',(msg)=>{
-        console.log("message recieved",msg);
+    console.log("The connection is established.");
+    csock.on('send-message-from-client',(msgData)=>{
+        
+        csock.broadcast.emit("send-message-server",msgData)
+        console.log("message sent back to client");
     })
+    csock.on('disconnect',(csock)=>{
+    
+        console.log("user left");
+    })
+
 });
 
 httpserver.listen(7000,function(){
