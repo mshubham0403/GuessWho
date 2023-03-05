@@ -19,6 +19,22 @@ app.get("/",function(req,res){
 
 io.on("connection",function(csock){
     console.log("The connection is established.");
+   
+    
+
+    csock.on("typing-started-client",()=>{
+    
+        csock.broadcast.emit("typing-started-server")
+        // console.log("typing-started-server");
+
+    })
+
+    csock.on('typing-stopped-client',()=>{
+    
+        csock.broadcast.emit("typing-stopped-server")
+    // console.log("typing-stopped-server");
+
+    })
     csock.on('send-message-from-client',(msgData)=>{
         
         csock.broadcast.emit("send-message-server",msgData)
@@ -28,6 +44,8 @@ io.on("connection",function(csock){
     
         console.log("user left");
     })
+  
+    
 
 });
 

@@ -5,6 +5,8 @@ import Card from "@mui/material/Card";
 
 import InputAdornment from "@mui/material/InputAdornment";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
@@ -16,15 +18,22 @@ export default function ChatWindow() {
   const [chat, setChat] = useState([]);
   let d=new Date();
   const [time,setTime]=useState(d.getTime())
+  const [typing, setTyping] = useState(false);
+  const [typingTimeout, settypingTimeout] = useState(null);
+
+
 
   useEffect(() => {
-    // setSock(io("http://localhost:7000"));
-    setSock(io("https://guesswhoserver.onrender.com"));
+    setSock(io("http://localhost:7000"));
+    // setSock(io("https://guesswhoserver.onrender.com"));
   }, []);
 
   useEffect(() => {
+    //checing if tere is socket and not null
     if (!csock) return;
 
+
+//checking if there is a message from server
     csock.on("send-message-server", (msgDataServ) => {
   
         setTime(prevTime=>String(d.getTime()));
@@ -32,6 +41,14 @@ export default function ChatWindow() {
       
         console.log("message recieved from server", msgDataServ);
       });
+
+//listening for typing changes
+      csock.on("typing-started-server", () => {setTyping(true);
+      // console.log('typing started server');
+    });
+      csock.on("typing-stopped-server", () => setTyping(false));
+
+
     }, [csock]);
 
   function handleForm(e) {
@@ -44,7 +61,21 @@ export default function ChatWindow() {
     console.log("this is the sent message", msg);
     setMsg(" ");
   }
+  function handleInput(e) {
+    setMsg(e.target.value);
+    csock.emit("typing-started-client");
+    console.log("typing-started-client");
 
+    if (typingTimeout) clearTimeout(typingTimeout);
+
+    settypingTimeout(
+      setTimeout(() => {
+        csock.emit("typing-stopped-client");
+    console.log("typing-stopped-client");
+
+      }, 1000)
+    );
+  }
   return (
     <div >
           <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -71,15 +102,28 @@ export default function ChatWindow() {
            
           ))}
         </Box>
+
+        {/* input and mssage part */}
+
         <Box component="form" onSubmit={handleForm}>
+        { typing 
+            &&
+        (
+            <InputLabel sx={{ color: "white" }} shrink htmlFor="message-input">
+              Typing...
+            </InputLabel>
+          )
+          }
+          
           <OutlinedInput
             sx={{ backgroundColor: "white" }}
             size="small"
+            id="message-input"
             fullWidth
             value={msg}
             placeholder="Write your message"
             inputProps={{ "aria-label": "search google maps" }}
-            onChange={(e) => setMsg(e.target.value)}
+            onChange={handleInput}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton type="submit" edge="end">
