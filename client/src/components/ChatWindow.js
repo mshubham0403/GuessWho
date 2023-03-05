@@ -24,8 +24,8 @@ export default function ChatWindow() {
 
 
   useEffect(() => {
-    setSock(io("http://localhost:7000"));
-    // setSock(io("https://guesswhoserver.onrender.com"));
+    // setSock(io("http://localhost:7000"));
+    setSock(io("https://guesswhoserver.onrender.com"));
   }, []);
 
   useEffect(() => {
