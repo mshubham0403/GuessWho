@@ -18,7 +18,8 @@ export default function ChatWindow() {
   const [time,setTime]=useState(d.getTime())
 
   useEffect(() => {
-    setSock(io("http://localhost:7000"));
+    // setSock(io("http://localhost:7000"));
+    setSock(io("https://guesswhoserver.onrender.com"));
   }, []);
 
   useEffect(() => {
