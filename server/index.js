@@ -32,5 +32,5 @@ io.on("connection",function(csock){
 });
 
 httpserver.listen(PORT,function(){
-    console.log("The server is up and running at 7000:)");
+    console.log("The server is up and running at",PORT ,":)");
 });
