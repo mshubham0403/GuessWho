@@ -6,6 +6,7 @@ import {Server} from 'socket.io';
 const app=express();
 const httpserver=http.createServer(app);
 const io=new Server(httpserver,{cors:["*"]});
+const PORT= process.env.PORT||7000;
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -30,6 +31,6 @@ io.on("connection",function(csock){
 
 });
 
-httpserver.listen(7000,function(){
+httpserver.listen(PORT,function(){
     console.log("The server is up and running at 7000:)");
 });
