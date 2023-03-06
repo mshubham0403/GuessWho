@@ -21,13 +21,16 @@ export default function ChatWindow() {
   const [typing, setTyping] = useState(false);
   const [typingTimeout, settypingTimeout] = useState(null);
 
-
+  const SERVER_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://guesswhoserver.onrender.com"
+    : "http://localhost:7000";
 
   useEffect(() => {
-    let envi = process.env.NODE_ENV
-    console.log(envi);
+    // let envi = process.env.NODE_ENV
+    // console.log(envi);
     // setSock(io("http://localhost:7000"));
-    setSock(io("https://guesswhoserver.onrender.com"));
+    setSock(io(SERVER_URL));
   }, []);
 
   useEffect(() => {
