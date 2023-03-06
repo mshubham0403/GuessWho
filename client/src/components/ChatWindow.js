@@ -24,6 +24,8 @@ export default function ChatWindow() {
 
 
   useEffect(() => {
+    let envi = process.env.NODE_ENV
+    console.log(envi);
     // setSock(io("http://localhost:7000"));
     setSock(io("https://guesswhoserver.onrender.com"));
   }, []);
