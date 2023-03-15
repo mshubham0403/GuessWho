@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import {Server} from 'socket.io';
+import socketsFUN from "./socket/socketRoutes.js";
 
 
 const app=express();
@@ -17,37 +18,11 @@ app.get("/",function(req,res){
     res.sendFile(__dirname+"/index.html");
 });
 
-io.on("connection",function(csock){
-    console.log("The connection is established.");
-   
-    
 
-    csock.on("typing-started-client",()=>{
-    
-        csock.broadcast.emit("typing-started-server")
-        // console.log("typing-started-server");
 
-    })
+io.on("connection",socketsFUN);
 
-    csock.on('typing-stopped-client',()=>{
-    
-        csock.broadcast.emit("typing-stopped-server")
-    // console.log("typing-stopped-server");
 
-    })
-    csock.on('send-message-from-client',(msgData)=>{
-        
-        csock.broadcast.emit("send-message-server",msgData)
-        console.log("message sent back to client");
-    })
-    csock.on('disconnect',(csock)=>{
-    
-        console.log("user left");
-    })
-  
-    
-
-});
 
 httpserver.listen(PORT,function(){
     console.log("The server is up and running at",PORT ,":)");

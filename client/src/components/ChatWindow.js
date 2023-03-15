@@ -9,11 +9,14 @@ import InputLabel from "@mui/material/InputLabel";
 
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
-import { circularProgressClasses } from "@mui/material";
+
+import { useOutletContext, useParams } from "react-router-dom";
+
+
+// import { circularProgressClasses } from "@mui/material";
 
 export default function ChatWindow() {
-  const [csock, setSock] = useState(null);
+  const { csock } = useOutletContext();
   const [msg, setMsg] = useState("");
   const [chat, setChat] = useState([]);
   let d=new Date();
@@ -21,17 +24,8 @@ export default function ChatWindow() {
   const [typing, setTyping] = useState(false);
   const [typingTimeout, settypingTimeout] = useState(null);
 
-  const SERVER_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://guesswhoserver.onrender.com"
-    : "http://localhost:7000";
-
-  useEffect(() => {
-    // let envi = process.env.NODE_ENV
-    // console.log(envi);
-    // setSock(io("http://localhost:7000"));
-    setSock(io(SERVER_URL));
-  }, []);
+  const { roomId } = useParams();
+  console.log(roomId);
 
   useEffect(() => {
     //checing if tere is socket and not null
@@ -42,7 +36,7 @@ export default function ChatWindow() {
     csock.on("send-message-server", (msgDataServ) => {
   
         setTime(prevTime=>String(d.getTime()));
-        setChat(chat=>[...chat, {message:msgDataServ.msg, recieved:true,t:time}]);
+        setChat(chat=>[...chat, msgDataServ]);
       
         console.log("message recieved from server", msgDataServ);
       });
@@ -58,32 +52,34 @@ export default function ChatWindow() {
 
   function handleForm(e) {
     e.preventDefault();
-
-    csock.emit("send-message-from-client", { msg });
+let msgDataSntCli = {message: msg , received:false,t:time,ro:roomId}
+    csock.emit("send-message-from-client",msgDataSntCli );
     setTime(prevTime=>String(d.getTime()));
 
-    setChat((prevChat)=>[...prevChat, {message:msg,received:true,t:time}]);
-    console.log("this is the sent message", msg);
+    setChat((prevChat)=>[...prevChat, msgDataSntCli]);
+    // console.log("this is the sent message", msg);
     setMsg(" ");
   }
   function handleInput(e) {
     setMsg(e.target.value);
-    csock.emit("typing-started-client");
-    console.log("typing-started-client");
+    csock.emit("typing-started-client",{roomId});
+    console.log("here is the cli ro",{roomId});
+    // console.log("typing-started-client");
 
     if (typingTimeout) clearTimeout(typingTimeout);
 
     settypingTimeout(
       setTimeout(() => {
-        csock.emit("typing-stopped-client");
-    console.log("typing-stopped-client");
+        csock.emit("typing-stopped-client",{roomId});
+    // console.log("typing-stopped-client");
 
       }, 1000)
     );
   }
   return (
-    <div >
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
+    // <div sx={{ width:"100%" }} >
+          /* <Box sx={{ display: "flex", justifyContent: "center" }}> */
+          
       <Card
         sx={{
           padding: 2,
@@ -91,9 +87,15 @@ export default function ChatWindow() {
           width: "60%",
           backgroundColor: "#42b0f5",
           color: "white",
+        
+          paddingLeft:"30px",paddingRight:"30px"
         }}
       >
-        <Box sx={{ marginBottom: 5 }}>
+         { roomId &&   
+            <Typography>Room Id : {roomId}</Typography>
+          }
+     
+        <Box sx={{ marginBottom: 5 , width:"100%"}}>
           {/* {chat.forEach((currChat)=>console.log("ji",currChat))}{ */}{
           chat.map((chatMessagei) => (
           
@@ -139,9 +141,9 @@ export default function ChatWindow() {
           />
         </Box>
       </Card>
-    </Box>
     
-    </div>
+    
+    // </div>
   );
 }
 
