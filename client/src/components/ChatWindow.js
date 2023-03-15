@@ -98,7 +98,7 @@ export default function ChatWindow() {
           chat.map((chatMessagei) => (
           
            <Typography
-              sx={{ textAlign: chatMessagei.received ? "left" : "right" }}
+              sx={{ textAlign: chatMessagei.received ? "right" : "left" }}
               key={chatMessagei.message+chatMessagei.t}
             >
              {chatMessagei.message}
