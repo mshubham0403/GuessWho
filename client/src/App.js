@@ -26,7 +26,7 @@ function App() {
       <Container>
         <Header />
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Outlet context={[{ csock },{SERVER_URL}]} />
+        <Outlet context={{ csock }} />
         </Box>
       </Container>
     </div>
