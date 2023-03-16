@@ -3,6 +3,8 @@ import App from "./App.js";
 import Chats from "./pages/Chats.js";
 import Home from "./pages/Home.js";
 import Room from "./pages/Room.js";
+import Sign from "./pages/signUp.js";
+import Choice from "./pages/Choice.js";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
       {
         path: "/room/:roomId",
         element: <Room />,
+      },
+      {
+        path: "/signUp",
+        element: < Sign/>,
+      },
+      {
+        path: "/choose",
+        element: < Choice/>,
       },
     ],
   },

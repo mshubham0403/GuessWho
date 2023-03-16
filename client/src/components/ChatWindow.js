@@ -47,7 +47,11 @@ export default function ChatWindow() {
     });
       csock.on("typing-stopped-server", () => setTyping(false));
 
-
+      csock.on("log-confirmation-from-server", (msgDataServ) => {
+  
+      
+        console.log("logdata recieved from server", msgDataServ);
+      });
     }, [csock]);
 
   function handleForm(e) {

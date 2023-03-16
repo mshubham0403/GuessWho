@@ -46,7 +46,6 @@ export default function SignIn() {
   
   const [userName, setUN] = useState("");
   const [pass, setPass] = useState("");
-  const [stat, setStat] = useState(false);
   // const { SERVER_URL } = useOutletContext();
   const SERVER_URL="http://localhost:7000"
 
@@ -65,24 +64,20 @@ export default function SignIn() {
       userId:userId
     };
     try {
-      await axios.post(SERVER_URL+"/users/login",logData).then(res=>{
-        
-        let resData = res.data
-        console.log(resData);
+      await axios.post(SERVER_URL+"/users",logData).then(res=>{
+       let resData = res.data
+        console.log(resData)
         setUN(prevun=>"success");
-        setStat(prevStat=>true);
-
-        
-      
       })
       console.log("emitted logdata");
       
     } catch (error) {
       console.log(error);
       setUN(prevun=>"error");
-
     }
+   
     setPass(prevpass=>"");
+
    
   };
   function handleInputE(event) {
@@ -113,7 +108,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Register
           </Typography>
           <Box
             component="form"
@@ -156,38 +151,25 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Register
             </Button>
-            {
-              stat && (
-              <Link href="/choose" variant="body2">
-                  
-            <Button
             
+           
+              
+              <Link href="/" variant="body2">
+            <Button
+              
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              proceed
+                login
             </Button>
                 </Link>
+             
 
-
-              )
-            }
-            <Grid container>
-              <Grid item xs>
               
-              <Link href="/chats" variant="body2">
-                  continue without login
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/signUp" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+          
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

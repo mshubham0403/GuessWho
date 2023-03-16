@@ -13,7 +13,7 @@ export default function Room() {
     csock.emit("join-room", { roomId: params.roomId });
   }, [csock]);
 
-  return( <div> 
+  return( <div style={{width:"100%", display:"flex",justifyContent:"center"}}> 
       <ChatWindow/>
   </div>
   );
