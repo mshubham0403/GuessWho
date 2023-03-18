@@ -1,9 +1,10 @@
-
 import * as React from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
+import Cookies from "js-cookies";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -39,61 +40,56 @@ function Copyright(props) {
 }
 
 const theme = createTheme();
-const userId = uuidv4();
+
 
 export default function SignIn() {
-
-  
   const [userName, setUN] = useState("");
   const [pass, setPass] = useState("");
-  const [stat, setStat] = useState(false);
-  // const { SERVER_URL } = useOutletContext();
-  const SERVER_URL="http://localhost:7000"
+  const [logSuccess, setLogSuccess] = useState(false);
+  const [userIdCon, setUserId] = useState("");
+  const { SERVER_URL } = useOutletContext();
 
 
+  useEffect(() => {
+ 
+   
 
+  setUserId(prevId => Cookies.getItem("userId"))
+}, [userIdCon]);
 
-   const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  
-
+    console.log("submit called");
     
-  
     const logData = {
       name: userName,
       password: pass,
-      userId:userId
+      userId: userIdCon,
     };
     try {
-      await axios.post(SERVER_URL+"/users/login",logData).then(res=>{
-        
-        let resData = res.data
+      console.log("try lled");
+      await axios.post(SERVER_URL + "/users/login", logData).then((res) => {
+        let resData = res.data;
         console.log(resData);
-        setUN(prevun=>"success");
-        setStat(prevStat=>true);
+        setUN((prevun) => "success");
+        setLogSuccess((prevLog) => true);
+         Cookies.setItem("userId",resData.userIdSentServer)
+         Cookies.setItem("userName",resData.userNameSentServer)
+         setUserId(prevId => Cookies.getItem("userId"))
 
-        
-      
-      })
+       
+      });
       console.log("emitted logdata");
-      
     } catch (error) {
       console.log(error);
-      setUN(prevun=>"error");
-
+      setUN((prevun) => "error");
     }
-    setPass(prevpass=>"");
-   
+    setPass((prevpass) => "");
   };
   function handleInputE(event) {
-    
     setUN(event.currentTarget.value);
-    
-   
-  
   }
   function handleInputP(event) {
- 
     setPass(event.currentTarget.value);
   }
 
@@ -132,7 +128,6 @@ export default function SignIn() {
               autoFocus
               value={userName}
               onChange={handleInputE}
-
             />
             <TextField
               margin="normal"
@@ -158,27 +153,17 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            {
-              stat && (
+
+            {logSuccess && (
               <Link href="/choose" variant="body2">
-                  
-            <Button
-            
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              proceed
-            </Button>
-                </Link>
-
-
-              )
-            }
+                <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                  proceed
+                </Button>
+              </Link>
+            )}
             <Grid container>
               <Grid item xs>
-              
-              <Link href="/chats" variant="body2">
+                <Link href="/chats" variant="body2">
                   continue without login
                 </Link>
               </Grid>

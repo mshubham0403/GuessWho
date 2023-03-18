@@ -27,6 +27,8 @@ export default function ChatWindow() {
   const { roomId } = useParams();
   console.log(roomId);
 
+
+
   useEffect(() => {
     //checing if tere is socket and not null
     if (!csock) return;

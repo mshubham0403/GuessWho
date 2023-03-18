@@ -8,10 +8,13 @@ import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-import { v4 as uid } from "uuid";
+import axios from "axios";
+import { useOutletContext, useParams } from "react-router-dom";
+import Cookies from "js-cookies";
 
-export default function Choice() {
+import { useEffect, useState } from "react";
+
+
 
 const ChoiceContainer = styled(Grid)({
   minHeight: "100vh",
@@ -30,14 +33,32 @@ const ChoiceCardContent = styled(CardContent)({
   padding: "2rem",
 });
 
-// const nav = useNavigate();
+export default function Profile() {
+  const { SERVER_URL } = useOutletContext();
+  const [userNameHEre, setUNHERE] = useState("");
 
-
-// function CreateRoom(){
-//   const RoomId = uid();
-//   nav(`/room/:${RoomId}`)
-
-// }
+    function Logout(){
+     
+        console.log("logout");
+    }
+    async function  Info () {
+      const userIdHere = {userId:Cookies.getItem("userId")}
+    try {
+        await axios.post(SERVER_URL+"/users/myInfo",userIdHere).then(res=>{
+          
+      const resData = res.data ;
+        setUNHERE(prev=>resData.nameSent);
+          console.log(resData.nameSent);
+        
+        })
+        console.log("got data");
+        
+      } catch (error) {
+        console.log(error);
+        
+  
+      }
+    }
   return (
     <ChoiceContainer>
       <Grid container spacing={2} justifyContent="center">
@@ -45,28 +66,24 @@ const ChoiceCardContent = styled(CardContent)({
           <ChoiceCard>
             <ChoiceCardContent>
               <Typography variant="h5" component="h2">
-               Choice 1
+              UserName: {userNameHEre}
+              </Typography>
+              <Typography variant="h5" component="h2">
+               Score :  =
               </Typography>
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Be a puzzler
+                UserId: {Cookies.getItem("userId")}
               </Typography>
-              <Button variant="contained" component={Link} to="/newRoom">
-               Create Room
-              </Button>
+             
             </ChoiceCardContent>
           </ChoiceCard>
         </Grid>
         <Grid item>
           <ChoiceCard>
             <ChoiceCardContent>
-              <Typography variant="h5" component="h2">
-                Choice 2
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Answer the puzzle
-              </Typography>
-              <Button variant="contained" component={Link} to="/newRoom">
-                Join a Room
+             
+              <Button variant="contained" onClick={Info}>
+                Get Info
               </Button>
             </ChoiceCardContent>
           </ChoiceCard>

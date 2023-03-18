@@ -19,6 +19,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import Cookies from "js-cookies";
+
 
 function Copyright(props) {
   return (
@@ -67,6 +69,7 @@ export default function SignIn() {
       await axios.post(SERVER_URL+"/users",logData).then(res=>{
        let resData = res.data
         console.log(resData)
+        Cookies.setItem("userId", logData.userId);
         setUN(prevun=>"success");
       })
       console.log("emitted logdata");

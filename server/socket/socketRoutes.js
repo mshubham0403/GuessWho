@@ -11,7 +11,13 @@ const sockets = (csock) => {
         // console.log("typing-started-serverzz");
 
     })
-
+    csock.on('updated-rooms',(roomList)=>{
+        let sk = csock.broadcast
+        // sk= (roomId) ? sk.to(roomId) : sk
+       sk.emit("rooms-is-updated",roomList)
+      console.log("roomList hasbeen sent");
+      
+      })
     csock.on('typing-stopped-client',({roomId})=>{
         let sk = csock.broadcast
         sk= (roomId) ? sk.to(roomId) : sk
