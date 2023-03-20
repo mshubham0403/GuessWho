@@ -4,12 +4,19 @@ import http from "http";
 import {Server} from 'socket.io';
 import socketsFUN from "./socket/socketRoutes.js";
 import bcrypt from "bcrypt"
-
-
+// import router from "./api/routes.js";
+import RoomDb from "./models/Room.js"
+import UserDb from "./models/User.js"
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors"
 import { userInfo } from "os";
+
+
+
+await mongoose.connect(
+  "mongodb+srv://mshubham:allinmask@cluster0.vtpm8td.mongodb.net/?retryWrites=true&w=majority"
+);
 
 const app=express();
 const httpserver=http.createServer(app);
@@ -73,6 +80,25 @@ app.post('/users/myInfo',async (req, res) => {
   res.json(userInfo)
 })
 
+//Signin=======================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+app.post('/users/login', async (req, res) => {
+  console.log("request sign in");
+  const user = users.find(user => user.name === req.body.name)
+  if (user == null) {
+    return res.status(400).send('Cannot find user')
+  }
+  try {
+    if(await bcrypt.compare(req.body.password, user.password)) {
+      const sentDtaConfirm = {userIdSentServer:user.userId,userNameSentServer:user.name,status:"Success"}
+      res.send(sentDtaConfirm)
+    } else {
+      res.send('User exists password incorrect')
+    }
+  } catch {
+    res.status(500).send("error")
+  }
+})
 //Signup---------------------------------------------------------------->>>>>>>>>=>>>>>>>>>
 
 app.post('/users', async (req, res) => {
@@ -86,6 +112,8 @@ else{
  
     const user = { name: req.body.name, password: hashedPassword ,userId:req.body.userId}
     users.push(user)
+    const userDbObj = new UserDb(user);
+    userDbObj.save();
     res.status(201).send("user added")
     console.log("user added",user);
   } catch {
@@ -112,6 +140,8 @@ else{
     
     const room = { id: req.body.id,name:req.body.name }
     Rooms.push(room)
+    const RoomDbObj = new RoomDb(room);
+    RoomDbObj.save();
     // res.status(201).send("room added",room)
     console.log("room added",room);
   } catch {
@@ -180,25 +210,6 @@ else{
 }
 })
 
-//Signin=======================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-app.post('/users/login', async (req, res) => {
-  console.log("request sign in");
-  const user = users.find(user => user.name === req.body.name)
-  if (user == null) {
-    return res.status(400).send('Cannot find user')
-  }
-  try {
-    if(await bcrypt.compare(req.body.password, user.password)) {
-      const sentDtaConfirm = {userIdSentServer:user.userId,userNameSentServer:user.name,status:"Success"}
-      res.send(sentDtaConfirm)
-    } else {
-      res.send('User exists password incorrect')
-    }
-  } catch {
-    res.status(500).send("error")
-  }
-})
 
 
 
