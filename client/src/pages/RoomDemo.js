@@ -9,7 +9,8 @@ import { v4 as uid } from "uuid";
 import Cookies from "js-cookies";
 import axios from "axios";
 import { useOutletContext, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
+import excludeVariablesFromRoot from "@mui/material/styles/excludeVariablesFromRoot";
 
 const RoomList = styled(List)({
   width: "100%",
@@ -37,34 +38,52 @@ const CreateRoomButton = styled(Button)({
   width: "40px",
 });
 
-function Room() {
+function Roomss() {
   const { SERVER_URL } = useOutletContext();
-  const {csock } = useOutletContext();
+  const { csock } = useOutletContext();
   const [rooms, setRooms] = useState([{ id: "room1", name: "Room 1" }]);
-  console.log(rooms);
+  const roomPerm = useRef(3);
+  
+
+ 
+
 
   useEffect(() => {
-   if(!csock) return;
+    if (!csock) return;
     csock.on("rooms-is-updated", (roomList) => {
       setRooms((prevRoom) => roomList);
 
       console.log("csock the new rooms array", roomList);
     });
-
+   
+   
+   
+  }, [csock]);
   
-    axios
+  useEffect(() => {
+    async function getroomlist(){
+      await   axios
       .get(SERVER_URL + "/rooms")
       .then((res) => {
+      
+       
+        
+  
+        
         setRooms((prevRoom) => res.data);
         console.log("rooms array axios", res.data);
+        
       })
-
+  
       .catch((err) => {
         console.error("Error fetching rooms:", err);
       });
-
-  }, [csock]);
-
+    }
+    getroomlist();
+   
+   
+  }, []);
+  
   async function postNewRoomToServer(newRoom) {
     try {
       await axios.post(SERVER_URL + "/rooms", newRoom).then((res) => {
@@ -75,36 +94,80 @@ function Room() {
     }
   }
 
-  function checkNewRoom(newRoom) {
-    let ans = false;
-    const chkRoomInd = rooms.findIndex((room) => room.name === newRoom.name);
-    if (chkRoomInd !== -1) {
-      ans = false;
-    } else {
-      ans = true;
+   
+
+ async function checkNewRoom(newRoom) {
+    
+   let chkRoomInd = "";
+    try {
+     await axios.post(SERVER_URL + "/chkrooms", newRoom).then((res) => {
+        chkRoomInd = res.data;
+        console.log("Rooms check from server:", res.data,chkRoomInd == "0");
+      
+    });
     }
-    return ans;
+    catch (error) {
+      console.error("Error chk rooms from server:", error);
+     
+        roomPerm.current = -1;
+        console.log("ctestat", roomPerm);
+       
+    
+          
+      
+     
+
+    }
+    if (chkRoomInd == "0") {
+      roomPerm.current = 0;
+
+
+      console.log("is set ",roomPerm);
+
+    console.log("room add allowed");
+
+    } 
+    else {
+    
+      roomPerm.current = 1;
+
+
+
+    console.log("room is there  added to server");
+
+    }
+  
   }
 
   const nav = useNavigate();
 
-  function HandleCreateRoom() {
+  async function HandleCreateRoom() {
+    
     const RoomId = uid();
     const userThatCreated = Cookies.getItem("userName");
     const newRoom = { id: RoomId, name: userThatCreated };
-    if (checkNewRoom(newRoom)) {
-      const newRooms = [...rooms, { id: RoomId, name: userThatCreated }];
-      setRooms((prevRoom) => newRooms);
+    console.log("add room initiated");
+     await checkNewRoom(newRoom);
+  
 
-      postNewRoomToServer(newRoom);
-     
-      csock.emit("updated-rooms",newRooms);
-
-    } else {
-      console.log("room already there");
+      console.log(roomPerm.current == 0, "perm",roomPerm)
+      if (roomPerm.current == 0) {
+        console.log("add room allowed setting");
+        
+        const newRooms = [...rooms, { id: RoomId, name: userThatCreated }];
+        setRooms((prevRoom) => newRooms);
+        
+        postNewRoomToServer(newRoom);
+        
+        csock.emit("updated-rooms", newRooms);
+      } else if (checkNewRoom(newRoom) === -1) {
+        console.log("room chk error");
+      } else {
+        console.log("room add not initiated");
+      }
+ 
     }
-  }
-
+    
   function HandleJoinRoomClick(roomId) {
     nav(`/room/${roomId}`);
   }
@@ -114,17 +177,16 @@ function Room() {
         await axios
           .post(SERVER_URL + "/delrooms", { name: roomName })
           .then((res) => {
-            console.log("id of Rooms deleted from server:", res.data[0][0].id);
+            console.log("id of Rooms deleted from server:");
             console.log("Rooms deleted from server:", res.data);
             setRooms((prevRoom) => res.data[1]);
-      csock.emit("updated-rooms",res.data[1]);
-
+            csock.emit("updated-rooms", res.data[1]);
           });
       } catch (error) {
         console.error("Error deletinging rooms to server:", error);
       }
     } else {
-      alert("You cannot delete other user's room.")
+      alert("You cannot delete other user's room.");
     }
   }
   const HandleBackButtonClick = () => {
@@ -165,4 +227,4 @@ function Room() {
     </>
   );
 }
-export default Room;
+export default Roomss;

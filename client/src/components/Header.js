@@ -20,14 +20,15 @@ function Header({ userIdState,setUserIdState }) {
   return (
     <>
       <Card sx={{ marginTop: 5, backgroundColor: "#42b0f5", display: "flex" }}>
-        <Link to="/" sx={{ flexGrow: 1 }}>
+       { !userIdState &&
+       <Link to="/" sx={{ flexGrow: 1 }}>
           <Button
             sx={{ color: "white", textDecoration: "none", width: "100%" }}
             variant="outlined"
           >
             Home
           </Button>
-        </Link>
+        </Link>}
         <Link to="/chats" sx={{ flexGrow: 1 }}>
           <Button
             sx={{ color: "white", textDecoration: "none", width: "100%" }}

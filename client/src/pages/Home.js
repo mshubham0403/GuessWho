@@ -67,7 +67,7 @@ export default function SignIn() {
       userId: userIdCon,
     };
     try {
-      console.log("try lled");
+      console.log("try called");
       await axios.post(SERVER_URL + "/users/login", logData).then((res) => {
         let resData = res.data;
         console.log(resData);

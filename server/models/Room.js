@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const roomsSchema = new Schema({
-  Id: String,
+  id: String,
   name: String,
 });
 
