@@ -13,7 +13,7 @@ import cors from "cors";
 import { userInfo } from "os";
 
 await mongoose.connect(
-  "mongodb+srv://mshubham:Atlass@2023@cluster0.vtpm8td.mongodb.net/?retryWrites=true&w=majority"
+  "mongodb+srv://mshubham:Atlass2023@cluster0.vtpm8td.mongodb.net/?retryWrites=true&w=majority"
 );
 
 const app = express();
