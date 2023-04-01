@@ -145,7 +145,8 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
+            {!logSuccess &&
+              <Button
               type="submit"
               fullWidth
               variant="contained"
@@ -153,6 +154,7 @@ export default function SignIn() {
             >
               Sign In
             </Button>
+            }
 
             {logSuccess && (
               <Link href="/choose" variant="body2">

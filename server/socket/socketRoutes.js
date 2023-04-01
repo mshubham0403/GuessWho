@@ -48,13 +48,13 @@ const sockets = (csock) => {
         console.log("file reached")
       
 
-        console.log("get",dataRecieved.socketId)
+  
     
         csock.broadcast.to(dataRecieved.roomId).emit("uploaded", { buffer: dataRecieved.imgData });
       });
 
     csock.on('disconnect',(csock)=>{
-    
+       
         console.log("user left");
     })
   

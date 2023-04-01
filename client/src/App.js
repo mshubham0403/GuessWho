@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookies";
 
+import { useNavigate } from "react-router-dom";
 
 
 function App() {
@@ -19,17 +20,23 @@ function App() {
     ? "https://guesswhoserver.onrender.com"
     : "http://localhost:7000";
 
+  const nav =useNavigate();
   useEffect(() => {
    
     setSock(prev=>(io(SERVER_URL)));
 
     const _userId = Cookies.getItem("userId");
-    console.log("User Id",_userId);
+    console.log("User Id app",_userId);
 
-    if (_userId){ setUserIdS(prevId=>true);
+    if (_userId){ 
+      setUserIdS(prevId=>true);
+       nav("/choose");
     }
     
   }, []);
+  
+
+  
   return (
     <div>
      

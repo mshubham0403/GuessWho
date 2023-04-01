@@ -34,6 +34,7 @@ export default function Room() {
 
     nav(`/newRoom`);
   };
+ 
   
 
 
@@ -41,8 +42,9 @@ export default function Room() {
       <>
       <ChatWindow/>
       <BackButton variant="contained" onClick={HandleBackButtonClick}>
-        Back
+        Leave game
       </BackButton>
+    
       </>
   </div>
   );

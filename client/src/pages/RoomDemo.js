@@ -43,12 +43,23 @@ function Roomss() {
   const { csock } = useOutletContext();
   const [rooms, setRooms] = useState([{ id: "room1", name: "Room 1" }]);
   const roomPerm = useRef(3);
+  const roleStatus = useRef();
+
   
 
  
 
 
   useEffect(() => {
+    console.log(Cookies.getItem("role"));
+    if(Cookies.getItem("role")==="question"){
+      roleStatus.current=true;
+      console.log("true")
+    }
+    else if(Cookies.getItem("role")==="answer"){
+      roleStatus.current=false;
+      console.log("false")
+    }
     if (!csock) return;
     csock.on("rooms-is-updated", (roomList) => {
       setRooms((prevRoom) => roomList);
@@ -195,9 +206,10 @@ function Roomss() {
 
   return (
     <>
-      <CreateRoomButton variant="contained" onClick={HandleCreateRoom}>
+     { roleStatus.current && 
+     <CreateRoomButton variant="contained" onClick={HandleCreateRoom}>
         Create Room
-      </CreateRoomButton>
+      </CreateRoomButton>}
       <RoomList>
         {rooms.map((room) => (
           <RoomListItem key={room.id}>
