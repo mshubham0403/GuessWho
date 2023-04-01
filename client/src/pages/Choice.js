@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { v4 as uid } from "uuid";
+import Cookies from "js-cookies";
 
 export default function Choice() {
 
@@ -38,9 +39,23 @@ const ChoiceCardContent = styled(CardContent)({
 //   nav(`/room/:${RoomId}`)
 
 // }
+
+function btnclick(e){
+console.log(e);
+switch(e){
+  case "answer":
+Cookies.setItem("role","answer");
+break;
+case "question":
+  Cookies.setItem("role","question");
+  break;
+  default:
+    Cookies.setItem("role","not chosen");
+}
+}
   return (
     <ChoiceContainer>
-      <Grid container spacing={2} justifyContent="center">
+      <Grid container spacing={4} justifyContent="center">
         <Grid item>
           <ChoiceCard>
             <ChoiceCardContent>
@@ -50,7 +65,9 @@ const ChoiceCardContent = styled(CardContent)({
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
                 Be a puzzler
               </Typography>
-              <Button variant="contained" component={Link} to="/newRoom">
+              <Button variant="contained" id ="question" component={Link} to="/newRoom"
+              onClick={()=>{btnclick("question")}}
+              >
                Create Room
               </Button>
             </ChoiceCardContent>
@@ -65,7 +82,7 @@ const ChoiceCardContent = styled(CardContent)({
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
                 Answer the puzzle
               </Typography>
-              <Button variant="contained" component={Link} to="/newRoom">
+              <Button variant="contained" id="answer" onClick={()=>{btnclick("answer")}} component={Link} to="/newRoom">
                 Join a Room
               </Button>
             </ChoiceCardContent>

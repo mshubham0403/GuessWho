@@ -2,15 +2,15 @@ import { Link } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import { useOutletContext } from "react-router-dom";
+
 import Cookies from "js-cookies";
-import { v4 as uuidv4 } from "uuid";
+
 // check
 
 function Header({ userIdState,setUserIdState }) {
-  let userqq = userIdState;
-  console.log("fire",userqq);
-  const roomId = uuidv4();
+ 
+ 
+  // const roomId = uuidv4();
   function Logout(){
     setUserIdState(prevState => null);
     Cookies.removeItem("userId");
@@ -36,7 +36,7 @@ function Header({ userIdState,setUserIdState }) {
           >
             Chats
           </Button>
-        </Link>
+        </Link>``
         <Link to={`/newRoom`} sx={{ flexGrow: 1 }}>
           <Button
             sx={{ color: "white", textDecoration: "none", width: "100%" }}

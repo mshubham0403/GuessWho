@@ -1,3 +1,4 @@
+import { promises as fs } from "fs";
 const sockets = (csock) => {
     console.log("The connection is established3.");
    
@@ -33,7 +34,7 @@ const sockets = (csock) => {
         
         sk= (msgData.ro) ? sk.to(msgData.ro) : sk
         sk.emit("send-message-server",(msgData))
-        console.log("message sent back to client");
+        console.log("message sent back to client.ko");
     })
 
 
@@ -41,8 +42,16 @@ const sockets = (csock) => {
         
         console.log("Joining room",roomId);
         csock.join(roomId);
-    })
+    });
 
+    csock.on("upload",  (dataRecieved) => {
+        console.log("file reached")
+      
+
+        console.log("get",dataRecieved.socketId)
+    
+        csock.broadcast.to(dataRecieved.roomId).emit("uploaded", { buffer: dataRecieved.imgData });
+      });
 
     csock.on('disconnect',(csock)=>{
     

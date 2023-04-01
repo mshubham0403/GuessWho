@@ -20,22 +20,23 @@ function App() {
     : "http://localhost:7000";
 
   useEffect(() => {
-    // let envi = process.env.NODE_ENV
-    // console.log(envi);
-    // setSock(io("http://localhost:7000"));
-    setSock(io(SERVER_URL));
+   
+    setSock(prev=>(io(SERVER_URL)));
 
     const _userId = Cookies.getItem("userId");
-    console.log("var use",_userId);
+    console.log("User Id",_userId);
 
     if (_userId){ setUserIdS(prevId=>true);
-    console.log("state use",userIdS);
-  }
- 
-}, [userIdS]);
+    }
+    
+  }, []);
   return (
     <div>
+     
       <Container>
+        {
+          console.log(userIdS)
+        }
         <Header SocketObject={csock} userIdState={userIdS} setUserIdState={setUserIdS} />
         <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Outlet context={{csock,SERVER_URL,userIdS}} />
