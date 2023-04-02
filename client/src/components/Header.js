@@ -14,6 +14,8 @@ function Header({ userIdState,setUserIdState }) {
   function Logout(){
     setUserIdState(prevState => null);
     Cookies.removeItem("userId");
+    Cookies.removeItem("JoinedRoom");
+    Cookies.removeItem("role");
     console.log("logout");
 }
 

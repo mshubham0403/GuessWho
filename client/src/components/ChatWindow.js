@@ -186,12 +186,12 @@ export default function ChatWindow() {
         {chat.map((data) =>
           data.type === "image" ? (
             <img
-              style={{ float: data.received ? "right" : "left" }}
+              style={{ position:"relative",left: data.received ? "96%" : "4%" ,display:"inline-block"}}
               src={data.message}
               alt="sent-file"
               width="100"
               key={time}
-              sx={{display:"inlineBlock"}}
+              
             />
           ) : (
             <Typography

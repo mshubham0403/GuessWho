@@ -5,6 +5,7 @@ import ChatWindow from "../components/ChatWindow";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import jsCookies from "js-cookies";
 
 
 
@@ -20,17 +21,23 @@ const BackButton = styled(Button)({
 export default function Room() {
   const params = useParams();
   const { csock } = useOutletContext();
+  const { roomJoinS } = useOutletContext();
 
   useEffect(() => {
    
     if (!csock) return;
     csock.emit("join-room", { roomId: params.roomId });
+    jsCookies.setItem("JoinedRoom",true);
+    console.log("joined room is set to",jsCookies.getItem("JoinedRoom"))
+    
   }, [csock]);
 
   const nav = useNavigate();
 
   const HandleBackButtonClick = () => {
 
+    jsCookies.setItem("JoinedRoom","false");
+    console.log("joined room is set to",jsCookies.getItem("JoinedRoom"))
 
     nav(`/newRoom`);
   };

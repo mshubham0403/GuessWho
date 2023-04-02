@@ -4,7 +4,7 @@ import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import Cookies from "js-cookies";
 
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 function App() {
   const [csock, setSock] = useState(null);
   const [userIdS, setUserIdS] = useState(false);
+  
 
 
   const SERVER_URL =
@@ -30,7 +31,17 @@ function App() {
 
     if (_userId){ 
       setUserIdS(prevId=>true);
+      console.log("join room app check",Cookies.getItem("JoinedRoom"))
+      if(Cookies.getItem("JoinedRoom")==null){
+    console.log("room join status not set");
+
        nav("/choose");
+      }
+      else if(Cookies.getItem("JoinedRoom")==="false"){
+        console.log("room join status false joined not");
+    
+           nav("/newRoom");
+          }
     }
     
   }, []);
@@ -44,7 +55,7 @@ function App() {
         {
           console.log(userIdS)
         }
-        <Header SocketObject={csock} userIdState={userIdS} setUserIdState={setUserIdS} />
+        <Header SocketObject={csock} userIdState={userIdS} setUserIdState={setUserIdS}   />
         <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Outlet context={{csock,SERVER_URL,userIdS}} />
         </Box>
