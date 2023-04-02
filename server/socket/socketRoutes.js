@@ -44,6 +44,18 @@ const sockets = (csock) => {
         csock.join(roomId);
     });
 
+    csock.on("question-asked",(questionObj)=>{
+        const questionTosend ={
+            message: questionObj.text,
+            received: true,
+            t: questionObj.time,
+            ro: questionObj.roomId,
+            ans:questionObj.expectedAnswer
+          };
+        console.log("Asked question",questionObj.text,"ans",questionObj.expectedAnswer);
+        csock.to(questionObj.roomId).emit("asked-question-server",questionTosend);
+    });
+
     csock.on("upload",  (dataRecieved) => {
         console.log("file reached")
       

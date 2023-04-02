@@ -48,9 +48,12 @@ Cookies.setItem("role","answer");
 break;
 case "question":
   Cookies.setItem("role","question");
+  console.log(Cookies.getItem("role"))
   break;
   default:
     Cookies.setItem("role","not chosen");
+    console.log(Cookies.getItem("role"))
+    break;
 }
 }
   return (

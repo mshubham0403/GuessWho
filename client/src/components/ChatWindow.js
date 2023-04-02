@@ -14,8 +14,9 @@ import { useOutletContext, useParams } from "react-router-dom";
 
 // import { circularProgressClasses } from "@mui/material";
 
-export default function ChatWindow() {
+export default function ChatWindow({ expectedAnswer, ansForQues,QuesAsked,isAsked }) {
   const { csock } = useOutletContext();
+ 
   const [msg, setMsg] = useState("");
   const [chat, setChat] = useState([]);
   const [imgFile, setImgFile] = useState(null);
@@ -27,44 +28,71 @@ export default function ChatWindow() {
   const [typingTimeout, settypingTimeout] = useState(null);
   const fileRef = useRef();
   const fileSelectionStatus = useRef();
-  const timesRun = useRef();
+
   const { roomId } = useParams();
-  timesRun.current=0;
-  
-  
 
   useEffect(() => {
-    console.log("tims run useEffect",timesRun.current);
-    timesRun.current=timesRun.current+1;
-    console.log("tims run useEffect",timesRun.current);
     //checing if tere is socket and not null
     if (!csock) {
-     setIsSocket(prev=>("no")) 
-     setTimeout(() => {
-       console.log("waiting fr socket")
-     }, 200);
+      setIsSocket((prev) => "no");
+      setTimeout(() => {
+        console.log("waiting 200ms");
+      }, 200);
       return;
     }
-      console.log("now socket is available")
+
+    
+    console.log("now socket is available");
+    
+    
+    
     //checking if there is a message from server
     csock.on("send-message-server", (msgDataServ) => {
       setTime((prevTime) => String(d.getTime()));
       setChat((chat) => [...chat, msgDataServ]);
-
+      console.log("expected ans line 53 chatindo", ansForQues, "after");
+      if (msgDataServ.message == ansForQues.current) {
+        alert("correct answer");
+      }
       console.log("message recieved from server", msgDataServ);
     });
-
+    
+    
+    
+    
     //listening for typing changes
     csock.on("typing-started-server", () => {
       setTyping(true);
       // console.log('typing started server');
     });
+
+
+
+
+//checking for questions from server
+    csock.on("asked-question-server", (questionDataObj) => {
+      console.log("asked question Server", questionDataObj);
+      setChat((prev) => [...prev, questionDataObj]);
+      ansForQues.current = questionDataObj.ans;
+     
+    });
+
+
+
+
+// typing controller
+
     csock.on("typing-stopped-server", () => setTyping(false));
-//check login status
+    //check login status
     csock.on("log-confirmation-from-server", (msgDataServ) => {
       console.log("logdata recieved from server", msgDataServ);
     });
-//checking for img file
+
+
+
+
+
+    //checking for img file
     csock.on("uploaded", (data) => {
       // console.log("this is recieved from other user", data.buffer);
       setTime((prevTime) => String(d.getTime()));
@@ -74,13 +102,26 @@ export default function ChatWindow() {
         { message: data.buffer, received: true, type: "image" },
       ]);
     });
+
   }, [isSocket]);
+
+
+useEffect(()=>{
+  
+if(isAsked==true){
+
+  setChat(prev=>([...prev,{message:QuesAsked.current,received:false,ro:roomId,type:"question",t:time}]));
+}
+},[]);
+
+
+
 
   function sendImgFile() {
     const dataSentToserver = {
       imgData: imgFile,
       roomId: roomId,
-    
+
       received: true,
       type: "Image",
     };
@@ -92,16 +133,15 @@ export default function ChatWindow() {
     ]);
   }
 
-  function handleForm(e) {
-    
-   
-    timesRun.current=timesRun.current+1;
-    console.log("tims run submit",timesRun.current);
 
-    
+
+
+
+
+  //sending msg or image data
+  function handleForm(e) {
     e.preventDefault();
     if (fileSelectionStatus.current === "yes") {
-      
       console.log("status of file selection", fileSelectionStatus);
       sendImgFile();
       setMsg((prev) => "Image sent");
@@ -117,30 +157,42 @@ export default function ChatWindow() {
       setTime((prevTime) => String(d.getTime()));
 
       setChat((prevChat) => [...prevChat, msgDataSntCli]);
+      if (msgDataSntCli.message === ansForQues.current) {
+        alert("you won");
+      }
       console.log("this is the sent message", msg);
       setMsg(" ");
     }
   }
+
+
+
+
+  //changing msg
   function handleInput(e) {
     setMsg(e.target.value);
     csock.emit("typing-started-client", { roomId });
-    
- 
 
     if (typingTimeout) clearTimeout(typingTimeout);
 
     settypingTimeout(
       setTimeout(() => {
         csock.emit("typing-stopped-client", { roomId });
-     
       }, 1000)
     );
   }
 
+
+
+
+  //checking selected file
   function selectFile() {
     fileRef.current.click();
   }
 
+
+
+  //file selected
   function fileSelected(e) {
     const file = e.target.files[0];
     const imgFileName = file.name;
@@ -163,6 +215,12 @@ export default function ChatWindow() {
     };
   }
 
+
+
+
+
+
+  //reder component
   return (
     // <div sx={{ width:"100%" }} >
     /* <Box sx={{ display: "flex", justifyContent: "center" }}> */
@@ -183,15 +241,19 @@ export default function ChatWindow() {
 
       <Box sx={{ marginBottom: 5, width: "100%" }}>
         {/* {chat.forEach((currChat)=>console.log("ji",currChat))}{ */}
+        {expectedAnswer}
         {chat.map((data) =>
           data.type === "image" ? (
             <img
-              style={{ position:"relative",left: data.received ? "96%" : "4%" ,display:"inline-block"}}
+              style={{
+                position: "relative",
+                left: data.received ? "96%" : "4%",
+                display: "inline-block",
+              }}
               src={data.message}
               alt="sent-file"
               width="100"
               key={time}
-              
             />
           ) : (
             <Typography
@@ -202,7 +264,6 @@ export default function ChatWindow() {
             </Typography>
           )
         )}
-     
       </Box>
 
       {/* input and mssage part */}
@@ -247,7 +308,5 @@ export default function ChatWindow() {
         />
       </Box>
     </Card>
-
-    
   );
 }
