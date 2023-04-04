@@ -84,4 +84,4 @@ If you would like to contribute to GuessWho, please follow these guidelines:
 4. Push your changes to your forked repository using :arrow_up: `git push origin [branch-name]`.
 5. Submit a pull request from your forked repository to this repository.
 
-Please make sure that any code changes are well-documented and include appropriate tests where applicable.
+
