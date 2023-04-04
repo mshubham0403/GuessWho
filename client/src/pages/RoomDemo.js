@@ -215,13 +215,16 @@ function Roomss() {
           <RoomListItem key={room.id}>
             <RoomListItemText primary={room.name} secondary={room.id} />
             <>
-              <Button
+             { Cookies.getItem("role")==="answer" &&
+             
+             <Button
                 variant="contained"
                 color="primary"
                 onClick={() => HandleJoinRoomClick(room.id)}
               >
                 Join Room
               </Button>
+              }
               <Button
                 variant="contained"
                 color="primary"
