@@ -6,7 +6,7 @@ GuessWho is a real-time chat application that allows users to connect and commun
 
 To install and run GuessWho on your local machine, follow these steps:
 
-1. Clone this repository to your local machine using :octocat: `git clone https://github.com/[username]/GuessWho.git`.
+1. Clone this repository to your local machine using :octocat: `git clone https://github.com/mshubham0403/GuessWho.git`.
 2. Navigate to the root directory of the project using :file_folder: `cd GuessWho`.
 3. Install the project dependencies using :hammer_and_wrench: `npm install`.
 4. Start the server using :rocket: `npm start`.
