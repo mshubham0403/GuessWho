@@ -1,13 +1,13 @@
-# GuessWho
+# KnowWhere
 
-GuessWho is a real-time chat application that allows users to connect and communicate with each other through web sockets. It uses the Express framework, Mongoose, Socket.IO, and other libraries to set up a server that handles incoming connections and stores user and chat room information in a MongoDB database.
+This is a text based multiplayer puzzle game with real-time chat that allows users to connect and communicate with each other through web sockets. It uses the Express framework, Mongoose, Socket.IO, and other libraries to set up a server that handles incoming connections and stores user and chat room information in a MongoDB database.
 
 ## Installation
 
 To install and run GuessWho on your local machine, follow these steps:
 
-1. Clone this repository to your local machine using :octocat: `git clone https://github.com/mshubham0403/GuessWho.git`.
-2. Navigate to the root directory of the project using :file_folder: `cd GuessWho`.
+1. Clone this repository to your local machine using :octocat: `git clone https://github.com/mshubham0403/KnowWhere.git`.
+2. Navigate to the root directory of the project using :file_folder: `cd KnowWhere`.
 3. Install the project dependencies using :hammer_and_wrench: `npm install`.
 4. Start the server using :rocket: `npm start`.
 
