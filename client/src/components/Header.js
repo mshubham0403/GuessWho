@@ -38,15 +38,17 @@ function Header({ userIdState,setUserIdState }) {
           >
             Chats
           </Button>
-        </Link>``
+        </Link>
+        { userIdState &&
         <Link to={`/newRoom`} sx={{ flexGrow: 1 }}>
           <Button
             sx={{ color: "white", textDecoration: "none", width: "100%" }}
             variant="outlined"
           >
-            Room1
+            RoomList
           </Button>
         </Link>
+}
         {
         userIdState && (
           <Link to="/profile" sx={{ flexGrow: 1 }}>

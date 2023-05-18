@@ -6,11 +6,30 @@ import Header from "./components/Header";
 import { io } from "socket.io-client";
 import { useEffect, useState,useRef } from "react";
 import Cookies from "js-cookies";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
 import { useNavigate } from "react-router-dom";
 
 
 function App() {
+  function Copyright(props) {
+    return (
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        {...props}
+      >
+        {"Copyright © "}
+        <Link color="inherit" href="">
+          KnowWhere
+        </Link>{" "}
+        {new Date().getFullYear()}
+        {"."}
+      </Typography>
+    );
+  }
   const [csock, setSock] = useState(null);
   const [userIdS, setUserIdS] = useState(false);
   
@@ -59,6 +78,7 @@ function App() {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Outlet context={{csock,SERVER_URL,userIdS}} />
         </Box>
+           {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </div>
   );

@@ -1,4 +1,5 @@
 import express from "express";
+import { MongoClient, ServerApiVersion } from "mongodb";
 import mongoose from "mongoose";
 import http from "http";
 import { Server } from "socket.io";
@@ -11,11 +12,17 @@ import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import { userInfo } from "os";
+import { log } from "console";
 
-await mongoose.connect(
-  "mongodb+srv://mshubham:Atlass2023@cluster0.vtpm8td.mongodb.net/?retryWrites=true&w=majority"
-);
+const uri = "mongodb+srv://mshubham:Atlass2023@cluster0.vtpm8td.mongodb.net/test?retryWrites=true&w=majority";
 
+try{
+  await mongoose.connect(uri); 
+  ;
+  console.log("Pinged your deployment. You successfully connected to MongoDB!");
+ }catch(e){
+  console.log("could not connect mongodb because ",e);
+ }
 const app = express();
 const httpserver = http.createServer(app);
 const io = new Server(httpserver, { cors: ["*"] });

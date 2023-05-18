@@ -171,6 +171,7 @@ function Roomss() {
         postNewRoomToServer(newRoom);
         
         csock.emit("updated-rooms", newRooms);
+        nav(`/room/${RoomId}`);
       } else if (checkNewRoom(newRoom) === -1) {
         console.log("room chk error");
       } else {

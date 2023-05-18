@@ -15,7 +15,7 @@ Note: You will need to have Node.js and npm installed on your machine in order t
 
 ## Usage
 
-Once you have installed and started GuessWho, you can access it by navigating to :globe_with_meridians: `http://localhost:7000` in your web browser. From there, you can create an account or log in if you already have one.
+Once you have installed and started GuessWho, you can access it by navigating to :globe_with_meridians: `http://localhost:3000` in your web browser. From there, you can create an account or log in if you already have one.
 
 ### Sign Up
 

@@ -9,11 +9,11 @@ import jsCookies from "js-cookies";
 
 const BackButton = styled(Button)({
   marginTop: "16px",
-  position: "relative",
-  top: "1px",
-  height: "50px",
-  left: "-20px",
-  width: "100px",
+  position: "fixed",
+  bottom:"12px",
+  right:"12px",
+ height:"55px",
+  width: "80px",
 });
 
 const FormContainer = styled("div")({
@@ -25,6 +25,7 @@ const FormContainer = styled("div")({
 
 const FormInput = styled(TextField)({
   marginRight: "16px",
+  marginTop:"20px"
 });
 
 export default function Room() {
@@ -72,7 +73,7 @@ export default function Room() {
     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <>
         {(jsCookies.getItem("role")==="question") &&
-          <FormContainer sx={{display:"inline-flex"}}>
+          <FormContainer sx={{display:"grid"}}>
           <form onSubmit={handleSubmit}>
             <FormInput
               label="Ask Question"
@@ -81,13 +82,13 @@ export default function Room() {
               onChange={(e) => setQuestion(prev=>(e.target.value))}
             />
             <FormInput
-            sx={{marginTop:"14px"}}
+         
               label="Expected Answer"
               variant="outlined"
               value={expectedAnswer}
               onChange={(e) => setExpectedAnswer(prev=>(e.target.value))}
             />
-            <Button  variant="contained" type="submit" >
+            <Button  variant="contained" type="submit" sx={{position:"relative",right:"0px",top:"23px"}}>
               Send
             </Button>
           </form>
@@ -103,10 +104,11 @@ export default function Room() {
   }
   
   
-        <BackButton variant="contained" onClick={handleBackButtonClick}>
+      
+      </>
+      <BackButton variant="contained" onClick={handleBackButtonClick}>
           Leave game
         </BackButton>
-      </>
     </div>
   );
 }

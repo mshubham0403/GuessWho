@@ -31,8 +31,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        GuessWho
+      <Link color="inherit" href="">
+        KnowWhere
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -175,7 +175,7 @@ export default function SignIn() {
           
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+     
       </Container>
     </ThemeProvider>
   );
