@@ -36,7 +36,7 @@ function Header({ userIdState,setUserIdState }) {
             sx={{ color: "white", textDecoration: "none", width: "100%" }}
             variant="outlined"
           >
-            Chats
+            Open Chat
           </Button>
         </Link>
         { userIdState &&
